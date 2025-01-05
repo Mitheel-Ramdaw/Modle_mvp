@@ -166,12 +166,29 @@ values += values[:1]  # Close the radar chart loop
 angles = [n / float(len(categories)) * 2 * pi for n in range(len(categories))]
 angles += angles[:1]  # Add the first angle to close the loop
 
-fig, ax = plt.subplots(subplot_kw={"polar": True})
-ax.fill(angles, values, color="blue", alpha=0.25)
-ax.plot(angles, values, color="blue", linewidth=2)
+fig, ax = plt.subplots(subplot_kw={"polar": True}, facecolor="black")  # Set entire figure background to black
+
+# Plot data with a bright red radar and translucent fill
+ax.fill(angles, values, color="red", alpha=0.25)  # Bright red fill with some transparency
+ax.plot(angles, values, color="red", linewidth=2)  # Bright red lines
+
+# Set background color and text color for the polar plot
+ax.set_facecolor("black")  # Black background for the plot
+ax.spines['polar'].set_color("white")  # Make the outer border white
+ax.tick_params(colors="white")  # Make the ticks white
+ax.grid(color="white", linestyle="dotted", linewidth=0.5)  # Make the gridlines white
+
+# Set the labels and ticks to white
 ax.set_yticks([25, 50, 75, 100])  # Show percentage intervals
-ax.set_yticklabels(["25%", "50%", "75%", "100%"], fontsize=8)
+ax.set_yticklabels(["25%", "50%", "75%", "100%"], fontsize=8, color="white")
 ax.set_xticks(angles[:-1])
-ax.set_xticklabels(categories)
-plt.title("Diagnostic Section Scores (Normalized as % of Max Marks)")
+ax.set_xticklabels(categories, color="white")
+
+# Add space between the title and the chart, and set the title color to white
+plt.title("Diagnostic Section Scores (Normalized as % of Max Marks)", pad=35, color="white")
+
+# Adjust space at the bottom
+
+# Show the chart
 st.pyplot(fig)
+
