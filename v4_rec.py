@@ -116,9 +116,9 @@ except FileNotFoundError:
     st.stop()
 
 # Streamlit Sidebar
-st.sidebar.title("✨ Diagnostic Test Predictor ✨")
-grade = st.sidebar.selectbox("📚 Select Grade", list(grading_data.keys()))
-st.sidebar.write(f"You selected: {grade} 🎉")
+st.sidebar.title("Diagnostic Test Predictor")
+grade = st.sidebar.selectbox("Select Grade", list(grading_data.keys()))
+st.sidebar.write(f"You selected: {grade}")
 
 # Fetch grade-specific data
 grade_data = grading_data[grade]
@@ -127,24 +127,24 @@ total_marks = grade_data["total_marks"]
 performance_bands = grade_data["performance_bands"]
 
 # Input Scores
-st.title(f"📊 {grade} Diagnostic Test")
-st.header("📝 Enter Diagnostic Scores")
+st.title(f"{grade} Diagnostic Test")
+st.header("Enter Diagnostic Scores")
 scores = {}
 for section, max_marks in sections.items():
-    scores[section] = st.slider(f"✏️ {section} (Max {max_marks} Marks)", 0, max_marks, max_marks // 2)
+    scores[section] = st.slider(f"{section} (Max {max_marks} Marks)", 0, max_marks, max_marks // 2)
 
 # Calculate Total Score
 total_score = sum(scores.values())
 total_percentage = (total_score / total_marks) * 100
-st.subheader("🎯 Results")
-st.write(f"🎯 Total Diagnostic Score: **{total_score} / {total_marks} ({total_percentage:.2f}%)**")
+st.subheader("Results")
+st.write(f"Total Diagnostic Score: {total_score} / {total_marks} ({total_percentage:.2f}%)")
 
 # Predict Year-End Performance
 input_data = np.array([list(scores.values()) + [0] * (len(feature_columns) - len(scores))])
 input_scaled = scaler.transform(input_data)
 predicted_year_end = ridge_model.predict(input_scaled)[0]
 predicted_percentage = (predicted_year_end / total_marks) * 100
-st.write(f"📈 Predicted Year-End Performance: **{predicted_year_end:.2f} / {total_marks} ({predicted_percentage:.2f}%)**")
+st.write(f"Predicted Year-End Performance: {predicted_year_end:.2f} / {total_marks} ({predicted_percentage:.2f}%)")
 
 # Determine Performance Band
 predicted_band = "No Band"
@@ -154,10 +154,10 @@ for band, (min_score, max_score, range_desc) in performance_bands.items():
         predicted_band = f"{band} ({range_desc})"
         break
 
-st.write(f"🏆 Predicted Performance Band: **{predicted_band}**")
+st.write(f"Predicted Performance Band: {predicted_band}")
 
 # Radar Chart with Normalized Scores
-st.subheader("📊 Section Scores Visualization (Normalized)")
+st.subheader("Section Scores Visualization (Normalized)")
 
 categories = list(sections.keys())
 values = [scores[section] / max_marks * 100 for section, max_marks in sections.items()]  # Normalize scores to percentages
@@ -185,7 +185,10 @@ ax.set_xticks(angles[:-1])
 ax.set_xticklabels(categories, color="white")
 
 # Add space between the title and the chart, and set the title color to white
-plt.title(" Diagnostic Section Scores (Normalized as % of Max Marks)", pad=35, color="white")
+plt.title("Diagnostic Section Scores (Normalized as % of Max Marks)", pad=35, color="white")
+
+# Adjust space at the bottom
 
 # Show the chart
 st.pyplot(fig)
+
